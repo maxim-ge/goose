@@ -31,7 +31,7 @@ fn word(seed: u64) -> String {
 }
 
 fn main() {
-    let mut log: Vec<Event> = Vec::new();
+    let mut log: Vec<Event> = Vec::with_capacity(N as usize);
     let mut r: u64 = 12345;
     for _ in 0..N {
         r = xs_next(r);
