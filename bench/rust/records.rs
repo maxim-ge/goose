@@ -13,19 +13,25 @@ const PASSES: i64 = 4;
 enum Event {
     Tick,
     Move { id: i32, dx: i16, dy: i16 },
-    Say { id: i32, text: String },
+    Say { id: i32, text: MyString },
     Quit { id: i32, code: u8 },
+}
+
+#[derive(Clone, Copy)]
+struct MyString {
+    bytes: [u8; 15],
+    len: u8,
 }
 
 // A word of 4..15 letters from its own chain, so the caller's stream advances
 // once per event whatever the variant is.
-fn word(seed: u64) -> String {
-    let mut w = String::new();
+fn word(seed: u64) -> MyString {
     let mut r = xs_next(seed);
     let n = 4 + xs_mod(r, 12);
-    for _ in 0..n {
+    let mut w = MyString { bytes: [0; 15], len: n as u8 };
+    for byte in &mut w.bytes[..n as usize] {
         r = xs_next(r);
-        w.push((b'a' + xs_mod(r, 26) as u8) as char);
+        *byte = b'a' + xs_mod(r, 26) as u8;
     }
     w
 }
@@ -54,8 +60,8 @@ fn main() {
             total += match e {
                 Event::Tick => 1,
                 Event::Move { id, dx, dy } => *id as i64 + *dx as i64 + *dy as i64,
-                Event::Say { id, text } => *id as i64 + text.len() as i64
-                                           + text.as_bytes()[0] as i64,
+                Event::Say { id, text } => *id as i64 + text.len as i64
+                                           + text.bytes[0] as i64,
                 Event::Quit { id, code } => *id as i64 + *code as i64,
             };
         }
