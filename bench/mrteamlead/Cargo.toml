@@ -1,0 +1,28 @@
+[package]
+name = "mrteamlead"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[[bin]]
+name = "records"
+path = "records.rs"
+
+[[bin]]
+name = "records_opt"
+path = "records_opt.rs"
+
+[[bin]]
+name = "records_inline"
+path = "records_inline.rs"
+
+[[bin]]
+name = "records_discriminant"
+path = "records_discriminant.rs"
+
+[[bin]]
+name = "records_rayon"
+path = "records_rayon.rs"
+
+[dependencies]
+rayon = "1"
